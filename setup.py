@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(
-    name='Home Assistant RTA',
+    name='ts_predictor',
     version='0.1',
     packages=['ts_predictor'],
     url='https://github.com/project-stark/time-series-predictor',
@@ -10,8 +10,8 @@ setup(
     author_email='divyeshpeshavaria@gmail.com',
     description='',
     requires=[
-        'numpy',
+        'sklearn',
         'pandas',
-        'scikit-learn'
+        'numpy'
     ]
 )
