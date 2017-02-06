@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='ts_predictor',
-    version='0.2',
+    version='0.3',
     packages=['ts_predictor'],
     url='https://github.com/project-stark/time-series-predictor',
     license='',
