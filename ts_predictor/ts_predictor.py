@@ -1,24 +1,23 @@
 import numpy as np
-import pandas as pd
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.preprocessing import LabelEncoder
 
 
 class TimeSeriesPredictor:
-    def __init__(self, entity_id):
-        self._entity_id = entity_id
+    def __init__(self, data):
+        states = list(map(lambda x: x["state"], data))
+        self._classes = list(set(states))
+        self._states = list(map(lambda state: self._classes.index(state), states))
+        self._timestamps = list(map(lambda x: x["timestamp"], data))
         self._clf = DecisionTreeRegressor()
-        self._encoder = LabelEncoder()
 
-    def fit(self, data):
-        df = pd.DataFrame(data)
-        df[["state"]] = self._encoder.fit_transform(np.ravel(df[["state"]]))
-        self._clf.fit(df[["timestamp"]], df[["state"]])
+    def fit(self, data_point):
+        if data_point["state"] not in self._classes:
+            self._classes.append(data_point["state"])
+
+        self._states.append(self._classes.index(data_point["state"]))
+        self._timestamps.append(data_point["timestamp"])
+        print(np.array(list(self._timestamps)).reshape(len(self._timestamps), 1))
+        self._clf.fit(np.array(list(self._timestamps)).reshape(len(self._timestamps), 1), np.array(self._states))
 
     def predict(self, arg):
-        result = self._clf.predict(pd.Series(arg).values.reshape(-1, 1))
-        int_result = np.array(result, dtype="int32")
-        return self._encoder.inverse_transform(int_result)[0]
-
-    def __repr__(self):
-        return "Time Series Predictor for device {}".format(self._entity_id)
+        return self._classes[int(self._clf.predict(np.array(arg)))]
