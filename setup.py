@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name='ts_predictor',
-    version='0.3',
+    version='0.4',
     packages=['ts_predictor'],
     url='https://github.com/project-stark/time-series-predictor',
     license='',
