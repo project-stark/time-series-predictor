@@ -1,6 +1,6 @@
-from distutils.core import setup
+import setuptools
 
-setup(
+setuptools.setup(
     name='ts_predictor',
     version='0.3',
     packages=['ts_predictor'],
