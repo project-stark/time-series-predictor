@@ -1,15 +1,23 @@
+"""ts_predictor.py: Machine learning models to do predictions on Time series data"""
+
+
 import numpy as np
 from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import LabelEncoder
 
 
 class TimeSeriesPredictor:
-    def __init__(self, data):
-        states = data.values()
-        self._classes = list(set(states))
-        self._states = list(map(lambda state: self._classes.index(state), states))
-        self._timestamps = list(data.keys())
+
+    def __init__(self, timestamps, states):
+
+        self._encoder = LabelEncoder()
+        self._timestamps = np.array(timestamps)
+        self._states = self._encoder.fit_transform(states)
+
         self._clf = LogisticRegression(solver="sag", multi_class="multinomial", max_iter=10000, warm_start=True)
-        self._clf.fit(np.array(self._timestamps).reshape(len(self._timestamps), 1), np.array(self._states))
+
+        self._clf.fit(self._timestamps.reshape(len(self._timestamps), 1), self._states)
 
     def predict(self, timestamp):
-        return self._classes[int(self._clf.predict(np.array(timestamp)))]
+
+        return self._encoder.inverse_transform(self._clf.predict(np.array([timestamp]).reshape(1,-1)))[0]
