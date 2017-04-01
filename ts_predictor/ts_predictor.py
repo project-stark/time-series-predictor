@@ -17,4 +17,4 @@ class TimeSeriesPredictor:
     def predict(self, datetime_obj):
 
         data = np.array([[datetime_obj.hour, datetime_obj.minute]])
-        return self._clf.predict(data)
+        return self._clf.predict(data)[0]
